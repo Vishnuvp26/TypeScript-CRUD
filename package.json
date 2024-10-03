@@ -4,6 +4,7 @@
   "description": "",
   "main": "node dist/index.js",
   "scripts": {
+    "build": "tsc && copyfiles -u 1 src/views/* dist",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon --exec ts-node src/index.ts"
   },

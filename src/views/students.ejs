@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Students Data</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400&display=swap" rel="stylesheet">
+
+    <style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        background-color: whitesmoke;
+    }
+
+    .container {
+        max-width: 1000px;
+        margin-left: auto;  
+        margin-right: auto;
+        padding-left: 10px;
+        padding-right: 10px;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    h2 {
+        font-size: 26px;
+        margin: 20px 0;
+        text-align: center;
+    }
+
+    small {
+        font-size: 0.5em;
+    }
+
+    .responsive-table li {
+        border-radius: 3px;
+        padding: 25px 30px;
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 25px;
+    }
+
+    .table-header {
+        background-color: #95a5a67b;
+        font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+    }
+
+    .table-row {
+        background-color: #ffffff;
+        box-shadow: 0px 0px 9px 0px rgba(0, 0, 0, 0.1);
+    }
+
+    .col-1 {
+        flex-basis: 10%;
+    }
+
+    .col-2 {
+        flex-basis: 40%;
+    }
+
+    .col-3 {
+        flex-basis: 25%;
+    }
+
+    .col-4 {
+        flex-basis: 25%;
+    }
+
+    .add-student {
+        padding: 8px;
+        border: none;
+        background-color: #95a5a67b;
+        border-radius: 3px;
+        margin-left: 50px;
+        transition: 0.07s;
+    }
+
+    .add-student:hover {
+        background-color: #535e5f;
+        color: white;
+    }
+
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        padding-top: 10%;
+        background-color: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+    }
+
+    .modal-content {
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        width: 300px;
+        margin: auto;
+        position: relative;
+    }
+
+    #modal-close, #edit-modal-close{
+        position: absolute;
+        right: 20px;
+        top: 10px;
+        font-size: 24px;
+        color: #333;
+        font-weight: bold;
+        cursor: pointer;
+        transition: color 0.3s ease;
+    }
+
+    #modal-close:hover, #edit-modal-close:hover {
+        color: red;
+        cursor: pointer;
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+    }
+
+    label {
+        margin-bottom: 5px;
+    }
+
+    input {
+        margin-bottom: 10px;
+        padding: 8px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+    }
+
+    .add-submit-btn {
+        padding: 10px;
+        background-color: #95A5A6;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .add-submit-btn:hover {
+        background-color: #535e5f;
+    }
+
+    .edit-btn {
+        padding: 10px 15px;
+        background-color: #000000;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .edit-btn:hover {
+        background-color: #343434;
+    }
+
+    .delete-btn {
+        padding: 10px 15px; 
+        background-color: #ff0000;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .delete-btn:hover {
+        background-color: #ba0000;
+    }
+    .snack-bar {
+        position: fixed;
+        left: 50%;
+        bottom: 20px;
+        transform: translateX(-50%);
+        background-color: #333;
+        color: white;
+        padding: 16px;
+        border-radius: 4px;
+        z-index: 1000;
+        display: none;
+        box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
+        transition: opacity 0.5s ease;
+        opacity: 0;
+    }
+
+    .snack-bar.show {
+        display: block;
+        opacity: 1;
+    }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Students Data</h2>
+        <button class="add-student" id="add-student-btn">Add Student</button>
+        <ul class="responsive-table" id="table">
+    
+            <li class="table-header">
+                <div class="col col-1">SI.No</div>
+                <div class="col col-2">Name</div>
+                <div class="col col-2">Email</div>
+                <div class="col col-1">Age</div>
+                <div class="col col-1"></div>
+                <div class="col col-1"></div>
+            </li>
+    
+            <% if (students && students.length > 0) { %>
+                <% students.forEach((student, index) => { %>
+                    <li class="table-row">
+                        <div class="col col-1"><%= index + 1 %></div>
+                        <div class="col col-2"><%= student.name %></div>
+                        <div class="col col-2"><%= student.email %></div>
+                        <div class="col col-1"><%= student.age %></div>
+                        <div class="col col-1"><button class="edit-btn" data-student-id="<%= student._id %>">Edit</button></div>
+                        <div class="col col-1"><button class="delete-btn" data-student-id="<%= student._id %>">Delete</button></div>
+                    </li>
+                <% }) %>
+            <% } else { %>
+                <li class="table-row">
+                    <div class="col col-1" colspan="6">No students found</div>
+                </li>
+            <% } %>
+            
+        </ul>
+    </div>
+    
+
+    <!-- Add modal -->
+    <div class="modal" style="display: none;" id="add-student-modal">
+        <div class="modal-content">
+            <div>
+                <p id="modal-close">X</p>
+            </div>
+            <h2>Add student</h2>
+            <form action="/create" id="add-student-form">
+                <input type="text" id="name" name="name" placeholder=" Name">
+                <input type="text" id="email" name="email" placeholder=" Email">
+                <input type="number" id="age" name="age" placeholder=" Age" min="0">
+                <p style="color: red;" id="add-student-error"></p>
+                <button type="submit" id="add-student-submit">Submit</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit modal -->
+    <div class="modal" id="edit-student-modal" style="display: none;" data-student-id="">
+        <div class="modal-content">
+            <div>
+                <p id="edit-modal-close">X</p>
+            </div>
+            <h2>Edit Student</h2>
+            <form  action="/update" id="edit-student-form">
+                <label for="name">Name:</label>
+                <input type="text" id="edit-name" name="name" required>
+
+                <label for="email">Email:</label>
+                <input type="email" id="edit-email" name="email" required>
+
+                <label for="age">Age:</label>
+                <input type="number" id="edit-age" name="age" required>
+
+                <p style="color: red;" id="edit-student-error"></p>
+
+                <button class="add-submit-btn" type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
+    <div id="snack-bar" class="snack-bar"></div>
+
+    <script src="/script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</body>
+</html>
